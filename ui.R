@@ -1,10 +1,7 @@
 
-# Let user put in latitude, then calculate Ra
-# let user put in mean temperature, low, high
-# let user pick crop coefficient
-# then print the reference ET and the ETk
-
-
+# Let user put in latitude, longitude, time zone longitude,
+# time of day, and day of year
+# then use Angstrom equation to estimate Rs from Ra and convert to PAR
 
 library(shiny)
 
