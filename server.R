@@ -82,7 +82,9 @@ shinyServer(function(input, output) {
     
     no_cloud <- (input$ab)*Ra
     par <- no_cloud * 2.04
-    calcPpfd <- par * 10^6 / 60
+    
+    # set as 0 rather than negative for dark hours
+    calcPpfd <- ifelse(par < 0, 0, par * 10^6 / 60)
     
     # print the output
     paste("The expected PPFD in full sun at ", 
