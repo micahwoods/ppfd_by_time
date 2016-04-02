@@ -17,10 +17,10 @@ shinyUI(fluidPage(
    
       dateInput("date", "Date:"),
       
-      numericInput("hour", "Hour", 12,
+      numericInput("hour", "Hour", hour(now()),
                    0, 23, 1),
       
-      numericInput("minute", "Minute", 30,
+      numericInput("minute", "Minute", minute(now()),
                    0, 59, 1),
 
       numericInput("latitude",

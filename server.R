@@ -87,13 +87,23 @@ shinyServer(function(input, output) {
     calcPpfd <- ifelse(par < 0, 0, par * 10^6 / 60)
     
     # print the output
+    ifelse(input$minute >= 10,
     paste("The expected PPFD in full sun at ", 
           input$hour, ":", input$minute, 
           " on ", input$date, " is ",
           formatC(calcPpfd, digits = 4),
           " and if there are no clouds on this day, the DLI at this location 
           is expected to be ",
+          formatC(dli, digits = 3), ".", sep = ""),
+    paste("The expected PPFD in full sun at ", 
+          input$hour, ":", 0, input$minute, 
+          " on ", input$date, " is ",
+          formatC(calcPpfd, digits = 4),
+          " and if there are no clouds on this day, the DLI at this location 
+          is expected to be ",
           formatC(dli, digits = 3), ".", sep = "")
+    )
+    
 
   })
 
