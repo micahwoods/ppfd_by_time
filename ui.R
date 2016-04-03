@@ -4,6 +4,7 @@
 # then use Angstrom equation to estimate Rs from Ra and convert to PAR
 
 library(shiny)
+library(lubridate)
 
 shinyUI(fluidPage(
   
