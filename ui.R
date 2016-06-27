@@ -18,7 +18,7 @@ shinyUI(fluidPage(
    
       dateInput("date", "Date:"),
       
-      numericInput("hour", "Hour", hour(now()),
+      numericInput("hour", "Hour", hour(now(tzone = "")),
                    0, 23, 1),
       
       numericInput("minute", "Minute", minute(now()),
