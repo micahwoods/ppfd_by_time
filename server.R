@@ -5,12 +5,26 @@
 # http://shiny.rstudio.com
 #
 
-library("shiny")
-library("lubridate")
+source('r/functions.R')
 
 shinyServer(function(input, output) {
+  
+  iv <- InputValidator$new()
+  iv$add_rule("latitude", sv_between(-66.6, 66.6))
+  iv$add_rule("Lm", sv_between(-179.99, 179.99))
+  iv$add_rule("ab", sv_between(0, 1))
+  iv$add_rule("hour", sv_between(0, 23))
+  iv$add_rule("minute", sv_between(0, 59))
+ 
+  iv$enable()
 
   output$text1 <- renderText({
+    
+    lon_input <- input$Lm
+    
+    pred_tz <- tz_lookup_coords(input$latitude, lon_input, method = "fast", warn = FALSE)
+    
+    utc_offset <- tz_offset(input$date, tz = pred_tz)
     
     # gives first constant
     k1 <- (24*60)/pi  
@@ -48,10 +62,20 @@ shinyServer(function(input, output) {
     
     # the center of the time zone, in degrees west of Greenwich
     # so it is 360 - (15 * number of time zones)
-    Lz <- input$Lz
+   ## Lz <- input$Lz
     
-    # longitude in degrees west of greenwich at the measurement point
-    Lm <- input$Lm
+    # longitude in degrees 
+  ##  Lm <- input$Lm
+    
+    ## center of time zone longitude
+    Lz <- ifelse(utc_offset$utc_offset_h > 0,
+                 (24 - utc_offset$utc_offset_h) * 15,
+                 abs(utc_offset$utc_offset_h) * 15)
+    
+    ## longitude needs to be degrees west of greenwich
+    Lm <- ifelse(lon_input > 0,
+                 360 - abs(lon_input),
+                 abs(lon_input))
     
     # latitude
     latM <- input$latitude
@@ -92,16 +116,22 @@ shinyServer(function(input, output) {
           input$hour, ":", input$minute, 
           " on ", input$date, " is ",
           formatC(calcPpfd, digits = 4),
-          " and if there are no clouds on this day, the DLI at this location 
+          ". If there are no clouds on this day, the DLI at this location 
           is expected to be ",
-          formatC(dli, digits = 3), ".", sep = ""),
+          formatC(dli, digits = 3), 
+          ". The app is making calculations expecting this is in the ",
+          pred_tz, 
+          " time zone.", sep = ""),
     paste("The expected PPFD in full sun at ", 
           input$hour, ":", 0, input$minute, 
           " on ", input$date, " is ",
           formatC(calcPpfd, digits = 4),
-          " and if there are no clouds on this day, the DLI at this location 
+          ". If there are no clouds on this day, the DLI at this location 
           is expected to be ",
-          formatC(dli, digits = 3), ".", sep = "")
+          formatC(dli, digits = 3), 
+          ". The app is making calculations expecting this is in the ",
+          pred_tz, 
+          " time zone.", sep = "")
     )
     
 
