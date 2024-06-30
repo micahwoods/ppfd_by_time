@@ -17,7 +17,7 @@ shinyServer(function(input, output) {
   iv$add_rule("minute", sv_between(0, 59))
  
   iv$enable()
-
+  
   output$text1 <- renderText({
     
     lon_input <- input$Lm

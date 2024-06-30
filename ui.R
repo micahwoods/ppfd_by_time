@@ -24,21 +24,21 @@ shinyUI(fluidPage(
    
       dateInput("date", "Date:"),
       
-      numericInput("hour", "Hour", 12,
+      numericInput("hour", "Hour", lubridate::hour(lubridate::now()),
                    0, 23, 1),
       
       numericInput("minute", "Minute", lubridate::minute(lubridate::now()),
                    0, 59, 1),
 
       numericInput("latitude",
-                  "Latitude in degrees N or S of the equator",
+                  "Latitude in degrees N (positive values) or S (negative values) of the equator",
                   min = -66.6,
                   max = 66.6,
                   value = 13.4,
                   step = 0.01),
       
       numericInput("Lm",
-                   "Longitude degrees E or W of Greenwich",
+                   "Longitude degrees E (positive values) or W (negative values) of Greenwich",
                    min = -179.99,
                    max = 179.99,
                    value = 100.5,
@@ -51,7 +51,7 @@ shinyUI(fluidPage(
       #              value = 255,
       #              step = 0.01),
       
-      numericInput("ab", "transmittance",
+      numericInput("ab", "Transmittance, recommended 0.75 for clear sky conditions",
                               0.75, min = 0, max = 1, step = 0.01),
       
     # Show the output
@@ -67,13 +67,15 @@ shinyUI(fluidPage(
     
     helpText(HTML(paste("This app calculates the PPFD and DLI for any location between 66° N and 66° S using the Ångström equation."))),
     
+    helpText(HTML(paste("One way to find the exact latitude and longitude for any location is to click on a point in Google Maps. The first number shown is the latitude of that point, and the second number is the longitude."))),
+    
       helpText(HTML(paste("For more information about this calculator, 
                     bug reports, and feature requests, see the code on ",
                         a("GitHub.",
                           href = "https://github.com/micahwoods/ppfd_by_time"),
-                        " You can find PAR, light, and shade information at the PACE Turf and ATC websites. This is version 0.1.3 of the ",
+                        " You can find PAR, light, and shade information at the PACE Turf and ATC websites. This is version 0.1.4 of the ",
                         code("ppfd_by_time"),
-                        " app, last updated by Micah Woods on 2023-06-29.",
+                        " app, last updated by Micah Woods on 2024-06-30.",
                         sep = ""))),
     br(),
     a(href = "https://www.paceturf.org", 
